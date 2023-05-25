@@ -56,4 +56,11 @@ button {
 
 .operator {
     background-color: orange;
+    /*transition: .5s; */
+}
+
+.animation {
+    /*transform: scale(1.1);*/
+    border-color: blue;
+    box-shadow: 0 0 5px blue;
 }
