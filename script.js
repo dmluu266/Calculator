@@ -4,6 +4,7 @@ let currNumber = '';
 let first = '';
 let second = '';
 let op = '';
+let currOperator = '';
 
 // display
 const display = document.getElementById('display');
@@ -13,6 +14,12 @@ const num = document.querySelectorAll('.number');
 
 for (let i=0; i<num.length; i++) {
     num[i].addEventListener('click', () => {
+        // remove operator animation after user selects another number
+        if (op != '') {
+            currOperator.classList.remove('animation');
+        }
+        
+
         currNumber += num[i].textContent;
         display.textContent = currNumber;
         console.log(num[i].textContent);
@@ -22,9 +29,14 @@ for (let i=0; i<num.length; i++) {
 
 // event listener for operators
 const operators = document.querySelectorAll('.operator');
-let currOperator = '';
+
 for (let i=0; i<operators.length; i++) {
     operators[i].addEventListener('click', () => {
+        // perform calculation if user selects another operator
+        if (op != '') {
+            equ();
+        }
+        
         currOperator = operators[i];
         op = currOperator.textContent;
         // add operator animation
@@ -44,8 +56,10 @@ for (let i=0; i<operators.length; i++) {
 // equals event listener
 
 const equals = document.querySelector('.equals');
-equals.addEventListener('click', () => {
-    // + calculation
+equals.addEventListener('click', equ);
+
+function equ() {
+    // calculations
     if (op == '+') {
         first = parseInt(first) + parseInt(currNumber);
     }
@@ -63,4 +77,5 @@ equals.addEventListener('click', () => {
     // remove operator animation
     currOperator.classList.remove('animation');
     display.textContent = first;
-})
+    op = '';
+}
