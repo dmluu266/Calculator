@@ -17,6 +17,11 @@ for (let i=0; i<num.length; i++) {
         if (currNumber.includes('.') && num[i].textContent == '.') {
             return
         }
+        
+        // give length a limit
+        if (currNumber.length > 21) {
+            return
+        }
         // remove operator animation after user selects another number
         if (op != '') {
             currOperator.classList.remove('animation');
