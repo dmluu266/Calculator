@@ -13,6 +13,10 @@ const num = document.querySelectorAll('.number');
 
 for (let i=0; i<num.length; i++) {
     num[i].addEventListener('click', () => {
+        // don't allow user to insert multiple decimals
+        if (currNumber.includes('.') && num[i].textContent == '.') {
+            return
+        }
         // remove operator animation after user selects another number
         if (op != '') {
             currOperator.classList.remove('animation');
@@ -20,8 +24,6 @@ for (let i=0; i<num.length; i++) {
 
         currNumber += num[i].textContent;
         display.textContent = currNumber;
-        //console.log(num[i].textContent);
-        //console.log(currNumber)
     })
 }
 
@@ -57,8 +59,6 @@ for (let i=0; i<operators.length; i++) {
         
         // clear currNumber
         currNumber = '';
-
-        //console.log(op)
     })
 }
 
