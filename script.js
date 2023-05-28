@@ -2,7 +2,6 @@
 
 let currNumber = '';
 let first = '';
-let second = '';
 let op = '';
 let currOperator = '';
 
@@ -17,13 +16,12 @@ for (let i=0; i<num.length; i++) {
         // remove operator animation after user selects another number
         if (op != '') {
             currOperator.classList.remove('animation');
-        }
-        
+        }     
 
         currNumber += num[i].textContent;
         display.textContent = currNumber;
-        console.log(num[i].textContent);
-        console.log(currNumber)
+        //console.log(num[i].textContent);
+        //console.log(currNumber)
     })
 }
 
@@ -32,15 +30,26 @@ const operators = document.querySelectorAll('.operator');
 
 for (let i=0; i<operators.length; i++) {
     operators[i].addEventListener('click', () => {
+        // dont allow user to select operator without selecting number first
+        if (first == '' && currNumber == '') {
+            return
+        }
+
+        // user cannot select multiple operators
+        if (currNumber == '' && op != '') {
+            return
+        }
+
         // perform calculation if user selects another operator
         if (op != '') {
-            equ();
+            operate();
         }
         
         currOperator = operators[i];
         op = currOperator.textContent;
         // add operator animation
         currOperator.classList.add('animation');
+
         // set first = currNumber only if first calculation
         if (first == '') {
             first = currNumber;
@@ -49,28 +58,43 @@ for (let i=0; i<operators.length; i++) {
         // clear currNumber
         currNumber = '';
 
-        console.log(op)
+        //console.log(op)
     })
 }
 
 // equals event listener
 
 const equals = document.querySelector('.equals');
-equals.addEventListener('click', equ);
+equals.addEventListener('click', operate);
 
-function equ() {
+function operate() {
+    // handle error if user selects equal before entering 2nd number
+    if (currNumber == '') {
+        return
+    }
+
     // calculations
     if (op == '+') {
-        first = parseInt(first) + parseInt(currNumber);
+        first = parseFloat(first) + parseFloat(currNumber);
     }
     else if (op == '-') {
-        first = parseInt(first) - parseInt(currNumber);
+        first = parseFloat(first) - parseFloat(currNumber);
     }
     else if (op == 'x') {
-        first = parseInt(first) * parseInt(currNumber);
+        first = parseFloat(first) * parseFloat(currNumber);
     }
     else if (op == '/') {
-        first = parseInt(first) / parseInt(currNumber);
+        if (currNumber == 0) {
+            display.textContent = "lol no";
+            return
+        }
+        else {
+            first = parseFloat(first) / parseFloat(currNumber);
+        }     
+    }
+    // handle error if user selects equal before operator is selected
+    else if (op == '') {
+        return
     }
     // clear currNumber
     currNumber = '';
@@ -79,3 +103,33 @@ function equ() {
     display.textContent = first;
     op = '';
 }
+
+// clear button event listener
+const clear = document.getElementById('clear');
+
+clear.addEventListener('click', () => {
+    if (op != '') {
+        currOperator.classList.remove('animation');
+    }   
+    currNumber = '';
+    first = '';
+    op = '';
+    currOperator = '';
+    display.textContent = 0;
+})
+
+// delete button event listener
+const del = document.getElementById('delete');
+
+del.addEventListener('click', () => {
+    if (currNumber != '') {
+        // remove last character of string
+        currNumber = currNumber.slice(0, -1);
+        if (currNumber == '') {
+            display.textContent = 0;
+        }
+        else {
+            display.textContent = currNumber;
+        }
+    }
+});
